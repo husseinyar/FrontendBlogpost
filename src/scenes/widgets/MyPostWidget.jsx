@@ -127,6 +127,7 @@ const MyPostWidget = ({ picturePath }) => {
             color={mediumMain}
             sx={{ "&:hover": { cursor: "pointer", color: medium } }}
           >
+         
             Image
           </Typography>
         </FlexBetween>

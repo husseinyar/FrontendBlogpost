@@ -12,6 +12,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
+import { Navigate } from "react-router-dom";
 
 const PostWidget = ({
   postId,
@@ -50,12 +51,15 @@ const PostWidget = ({
 
   return (
     <WidgetWrapper m="2rem 0">
+      
       <Friend
         friendId={postUserId}
         name={name}
         subtitle={location}
         userPicturePath={userPicturePath}
+        onClick ={(userId)=>Navigate("home")}
       />
+      
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>

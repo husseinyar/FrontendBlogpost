@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
-
+import {toast } from 'react-toastify';
 import {BASE_URL} from "./../helper"
+// import React, { useState } from 'react';
 
 const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const dispatch = useDispatch();
@@ -24,18 +25,40 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const isFriend = friends.find((friend) => friend._id === friendId);
 
   const patchFriend = async () => {
-    const response = await fetch(
-      `${BASE_URL}/users/${_id}/${friendId}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+
+    try{
+
+
+      const response = await fetch(
+        `${BASE_URL}/users/${_id}/${friendId}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if(response.status === 400){
+        console.log("hello")
+        toast.info("Cannot add/remove yourself as a friend ")
+    
+        navigate("/home");
+      }else if(response.status === 404){
+      
+       toast.info("Cannot add/remove yourself as a friend ")
+       navigate("/home");
+      
+      }else{
+        const  data = await response.json();
+        dispatch(setFriends({ friends: data }));
       }
-    );
-    const data = await response.json();
-    dispatch(setFriends({ friends: data }));
+      
+    }catch(error){
+      toast.info("please try agian")
+    }
+    
+   
   };
 
   return (

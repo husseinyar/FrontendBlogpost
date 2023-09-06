@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   mode: "light",
+  isLoading: false,
   user: null,
   token: null,
   posts: [],
@@ -11,12 +12,18 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    extraReducers:(builder)=>{
+      builder.addCase(setLogin.pending, (state)=> {
+          state.loading= true;
+      })
+  },
     setMode: (state) => {
       state.mode = state.mode === "light" ? "dark" : "light";
     },
     setLogin: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
+     
     },
     setLogout: (state) => {
       state.user = null;

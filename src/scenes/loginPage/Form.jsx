@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, } from "react";
+
+import {toast } from 'react-toastify';
 import {
   Box,
   Button,
@@ -7,6 +9,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import LinearProgress from '@mui/material/LinearProgress';
+
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import {BASE_URL} from "../../helper"
@@ -25,6 +29,7 @@ const initialValuesRegister = {
   location: "",
   occupation: "",
   picture: "",
+  isloading: false
 };
 
 const initialValuesLogin = {
@@ -39,6 +44,7 @@ const Form = () => {
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
+
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
@@ -56,12 +62,19 @@ const Form = () => {
         body: formData,
       }
     );
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
+    if(savedUserResponse.ok){
+ 
+      onSubmitProps.resetForm();
+      toast.success("Your registration is successful");
 
-    if (savedUser) {
       setPageType("login");
-    }
+     
+   
+    
+  }else{
+    toast.info("Somthing want wrong Please try agin");
+  
+  }
   };
 
   const login = async (values, onSubmitProps) => {
@@ -70,16 +83,33 @@ const Form = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
+  
     const loggedIn = await loggedInResponse.json();
+ 
+
     onSubmitProps.resetForm();
+    <LinearProgress color="primary" sx={{'&::before': {color: 'red !important'}}} />
     if (loggedIn) {
       dispatch(
         setLogin({
           user: loggedIn.user,
           token: loggedIn.token,
+    
         })
+        
       );
-      navigate("/home");
+   
+      if(loggedInResponse.ok){
+  
+        toast.success("Your Login is successful",);
+        navigate("/home");
+      }else
+      {
+        toast.info("Your email or password is incorrect. try again ");
+      }
+     
+   
+    
     }
   };
 
@@ -194,7 +224,9 @@ const Form = () => {
                 </Box>
               </>
             )}
+        
 
+         
             <TextField
               label="Email"
               onBlur={handleBlur}
@@ -217,8 +249,12 @@ const Form = () => {
               sx={{ gridColumn: "span 4" }}
             />
           </Box>
+          {initialValuesRegister.isloading? <LinearProgress/>:( 
 
-          {/* BUTTONS */}
+
+
+       
+    
           <Box>
             <Button
               fullWidth
@@ -228,6 +264,7 @@ const Form = () => {
                 p: "1rem",
                 backgroundColor: palette.primary.main,
                 color: palette.background.alt,
+                cursor : "pointer",
                 "&:hover": { color: palette.primary.main },
               }}
             >
@@ -252,6 +289,7 @@ const Form = () => {
                 : "Already have an account? Login here."}
             </Typography>
           </Box>
+             )}
         </form>
       )}
     </Formik>

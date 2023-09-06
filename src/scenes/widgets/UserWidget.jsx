@@ -4,7 +4,8 @@ import {
   LocationOnOutlined,
   WorkOutlineOutlined,
 } from "@mui/icons-material";
-import {BASE_URL} from "../../helper"
+import {toast } from 'react-toastify';
+import {BASE_URL}  from "../../helper.js"
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
@@ -27,8 +28,21 @@ const UserWidget = ({ userId, picturePath }) => {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
-    const data = await response.json();
-    setUser(data);
+    if(response.status === 400){
+      console.log("hello")
+      toast.info("please wait a minute ")
+  
+      navigate("/home");
+    }else if(response.status === 404){
+    
+      toast.info("please wait a minute, and try agian ")
+     navigate("/home");
+    
+    }else{
+      const data = await response.json();
+      setUser(data);
+    }
+  
   };
 
   useEffect(() => {
@@ -36,6 +50,7 @@ const UserWidget = ({ userId, picturePath }) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!user) {
+    
     return null;
   }
 
@@ -121,7 +136,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
         <FlexBetween gap="1rem" mb="0.5rem">
           <FlexBetween gap="1rem">
-            <img src="../assets/twitter.png" alt="twitter" />
+          <img src={`${BASE_URL}/assets/twitter.png`} alt="twitter" />
             <Box>
               <Typography color={main} fontWeight="500">
                 Twitter
@@ -134,7 +149,8 @@ const UserWidget = ({ userId, picturePath }) => {
 
         <FlexBetween gap="1rem">
           <FlexBetween gap="1rem">
-            <img src="../assets/linkedin.png" alt="linkedin" />
+          <img src={`${BASE_URL}/assets/linkedin.png`} alt="linkedin" />
+          
             <Box>
               <Typography color={main} fontWeight="500">
                 Linkedin

@@ -27,6 +27,10 @@ const LoginPage = () => {
         <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
           Welcome the Husseins, the Social Media for Sociopaths!
         </Typography>
+        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
+          if you don't need to register please try this Email /pass <br/>  
+          Email::Test@gmail.com, password: Test123
+        </Typography>
         <Form />
       </Box>
     </Box>
