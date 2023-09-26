@@ -1,30 +1,54 @@
-// import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-// import {BASE_URL} from "../../helper"
-// import axios from 'axios';
+// import { createSlice } from "@reduxjs/toolkit";
 
-// const intialState ={
-//     loading: false,
-//     user: [],
-//     error: "",
-// }
+// const initialState = {
+//   mode: "light",
+//   isLoading: false,
+//   user: null,
+//   token: null,
+//   posts: [],
+// };
 
-
-// export const fetchUser = createAsyncThunk('user/fetchUser', ()=> {
- 
-//     return axios
-//     .get(`${BASE_URL}/users/${userId}`)
-//     .then((response)=> response.data.map((user)=> user.userId))
-
-// })
-
-// const userSlice = createSlice({
-//     user: null,
-//     token: null,
-//     intialState, 
-
+// export const authSlice = createSlice({
+//   name: "auth",
+//   initialState,
+//   reducers: {
 //     extraReducers:(builder)=>{
-//         builder.addCase(fetchUser.pending, (state)=> {
-//             state.loading= true;
-//         })
-//     }
-// })
+//       builder.addCase(setLogin.pending, (state)=> {
+//           state.loading= true;
+//       })
+//   },
+//     setMode: (state) => {
+//       state.mode = state.mode === "light" ? "dark" : "light";
+//     },
+//     setLogin: (state, action) => {
+//       state.user = action.payload.user;
+//       state.token = action.payload.token;
+     
+//     },
+//     setLogout: (state) => {
+//       state.user = null;
+//       state.token = null;
+//     },
+//     setFriends: (state, action) => {
+//       if (state.user) {
+//         state.user.friends = action.payload.friends;
+//       } else {
+//         console.error("user friends non-existent :(");
+//       }
+//     },
+//     setPosts: (state, action) => {
+//       state.posts = action.payload.posts;
+//     },
+//     setPost: (state, action) => {
+//       const updatedPosts = state.posts.map((post) => {
+//         if (post._id === action.payload.post._id) return action.payload.post;
+//         return post;
+//       });
+//       state.posts = updatedPosts;
+//     },
+//   },
+// });
+
+// export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } =
+//   authSlice.actions;
+// export default authSlice.reducer;
